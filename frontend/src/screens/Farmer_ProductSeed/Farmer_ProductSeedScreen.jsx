@@ -13,7 +13,7 @@ const Farmer_ProductSeedScreen = () => {
     const dispatch = useDispatch();
 
     const productSeedList = useSelector(state => state.productSeedList);
-    const { loading, error, productSeeds = [] } = productSeedList;
+    const { loading, error, productSeeds = [] } = productSeedList || {};
 
     const [numberOfItems, setNumberOfItems] = useState(6);
 
@@ -22,10 +22,11 @@ const Farmer_ProductSeedScreen = () => {
     }, [dispatch]);
 
     const showMore = () => {
-        if (numberOfItems + 3 <= productSeeds.length) {
+        const length = Array.isArray(productSeeds) ? productSeeds.length : 0;
+        if (numberOfItems + 3 <= length) {
             setNumberOfItems(numberOfItems + 3);
         } else {
-            setNumberOfItems(productSeeds.length);
+            setNumberOfItems(length);
         }
     };
 
@@ -57,7 +58,7 @@ const Farmer_ProductSeedScreen = () => {
                 ) : (
                     <div className="mt-8">
                         <div className="flex flex-wrap -mx-4">
-                            {productSeeds
+                            {(Array.isArray(productSeeds) ? productSeeds : [])
                                 .slice(0, numberOfItems)
                                 .map((seed, index) => (
                                     <PurchaseSeeds
@@ -73,7 +74,7 @@ const Farmer_ProductSeedScreen = () => {
                         </div>
 
                         <div className="mt-12 text-center flex flex-col items-center">
-                            {productSeeds && numberOfItems >= productSeeds.length ? (
+                            {productSeeds && numberOfItems >= (Array.isArray(productSeeds) ? productSeeds.length : 0) ? (
                                 <motion.div
                                     initial={{ opacity: 0 }}
                                     animate={{ opacity: 1 }}

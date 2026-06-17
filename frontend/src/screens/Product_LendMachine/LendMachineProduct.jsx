@@ -110,7 +110,7 @@ const LendMachineProduct = ({ history, match }) => {
                                                             onChange={(e) => setQty(Number(e.target.value))}
                                                             className="w-20 px-3 py-2 text-base text-gray-700 bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-primary focus:border-primary"
                                                         >
-                                                            {[...Array(productLendMachines.quantity).keys()].map((x) => (
+                                                            {[...Array(productLendMachines?.quantity || 0).keys()].map((x) => (
                                                                 <option key={x + 1} value={x + 1}>
                                                                     {x + 1}
                                                                 </option>

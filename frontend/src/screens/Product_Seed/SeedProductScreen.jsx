@@ -34,10 +34,10 @@ const SeedProductScreen = ({ history, match }) => {
         (productSeedDetails._id ? productSeedDetails : null) ||
         null
 
-    const userLogin = useSelector((state) => state.userLogin)
+    const userLogin = useSelector((state) => state.userLogin || {})
     const { userInfo } = userLogin
 
-    const productReviewCreate = useSelector((state) => state.productReviewCreate)
+    const productReviewCreate = useSelector((state) => state.productReviewCreate || {})
     const {
         success: successProductReview,
         loading: loadingProductReview,
@@ -180,11 +180,11 @@ const SeedProductScreen = ({ history, match }) => {
                                         <div className="bg-blue-50 text-blue-800 p-4 rounded-lg">No Reviews Yet. Be the first to review!</div>
                                     ) : (
                                         <div className="space-y-6">
-                                            {product.reviews.map((review) => (
+                                            {(Array.isArray(product?.reviews) ? product.reviews : []).map((review) => (
                                                 <div key={review._id} className="border-b border-gray-100 pb-6 last:border-0 last:pb-0">
                                                     <div className="flex justify-between items-center mb-2">
                                                         <strong className="text-gray-900">{review.name}</strong>
-                                                        <span className="text-sm text-gray-500">{review.createdAt.substring(0, 10)}</span>
+                                                        <span className="text-sm text-gray-500">{review.createdAt?.substring(0, 10)}</span>
                                                     </div>
                                                     <Rating value={review.rating} />
                                                     <p className="mt-3 text-gray-600">{review.comment}</p>

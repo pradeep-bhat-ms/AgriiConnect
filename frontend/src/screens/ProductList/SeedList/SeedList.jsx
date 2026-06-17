@@ -21,7 +21,8 @@ const SeedList = () => {
 
   // Your list reducer state uses { productSeeds: [] }
   const seedList = useSelector((state) => state.productSeedList || {})
-  const { loading = false, error = null, productSeed = [] } = seedList
+  const { loading = false, error = null, productSeeds = [], productSeed = [] } = seedList
+  const seedsToMap = productSeeds.length > 0 ? productSeeds : productSeed;
 
   // Delete slice name matches your store: productSeedDelete
   const seedDelete = useSelector((state) => state.productSeedDelete || {})
@@ -29,7 +30,7 @@ const SeedList = () => {
     loading: loadingDelete = false,
     error: errorDelete = null,
     success: successDelete = false,
-  } = seedDelete
+  } = seedDelete || {}
 
   // Create slice name in your store: seedCreate
   const seedCreate = useSelector((state) => state.seedCreate || {})
@@ -38,7 +39,7 @@ const SeedList = () => {
     error: errorCreate = null,
     success: successCreate = false,
     product: createdProduct,
-  } = seedCreate
+  } = seedCreate || {}
 
   useEffect(() => {
     if (successCreate && createdProduct?._id) {
@@ -94,7 +95,7 @@ const SeedList = () => {
                 </tr>
               </thead>
               <tbody>
-                {productSeed.map((p) => (
+                {(Array.isArray(seedsToMap) ? seedsToMap : []).map((p) => (
                   <tr key={p._id}>
                     <td>{p._id}</td>
                     <td>{p.name}</td>

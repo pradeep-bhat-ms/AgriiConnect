@@ -99,7 +99,7 @@ const SeedList = () => {
                 </tr>
               </thead>
               <tbody>
-                {productSeeds.map((p) => (
+                {(Array.isArray(productSeeds) ? productSeeds : []).map((p) => (
                   <tr key={p._id}>
                     <td>{p._id}</td>
                     <td>{p.name}</td>

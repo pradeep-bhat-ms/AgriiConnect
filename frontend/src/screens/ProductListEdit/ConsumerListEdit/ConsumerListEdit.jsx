@@ -27,15 +27,15 @@ const ConsumerListEdit = ({ match }) => {
     const [avalaibleLoc, setAvalaibleLoc] = useState('')
     const [uploading, setUploading] = useState(false)
 
-    const productId = match.params.id
+    const productId = match && match.params ? match.params.id : '';
 
     const dispatch = useDispatch()
     let history = useHistory()
 
-    const consumerProductDetails = useSelector(state => state.consumerProductDetails)
+    const consumerProductDetails = useSelector(state => state.consumerProductDetails) || {}
     const { loading, consumerProduct, error } = consumerProductDetails
 
-    const consumerUpdate = useSelector(state => state.consumerUpdate)
+    const consumerUpdate = useSelector(state => state.consumerUpdate) || {}
     const { loading: loadingUpdate, success: successUpdate, error: errorUpdate } = consumerUpdate
 
     useEffect(() => {
@@ -43,16 +43,16 @@ const ConsumerListEdit = ({ match }) => {
             dispatch({ type: CONSUMER_UPDATE_RESET })
             history.push('/admin/productlist')
         } else {
-            if (!consumerProduct.prod_name || consumerProduct._id !== productId) {
+            if (!consumerProduct || !consumerProduct.prod_name || consumerProduct._id !== productId) {
                 dispatch(listConsumerProductsDetails(productId))
             } else {
-                setProdName(consumerProduct.prod_name)
-                setSellerName(consumerProduct.seller_name)
-                setPrice(consumerProduct.price)
-                setImage(consumerProduct.image)
-                setProdSize(consumerProduct.prod_size)
-                setQuantity(consumerProduct.quantity)
-                setAvalaibleLoc(consumerProduct.avalaible_location)
+                setProdName(consumerProduct.prod_name || '')
+                setSellerName(consumerProduct.seller_name || '')
+                setPrice(consumerProduct.price || '')
+                setImage(consumerProduct.image || '')
+                setProdSize(consumerProduct.prod_size || '')
+                setQuantity(consumerProduct.quantity || '')
+                setAvalaibleLoc(consumerProduct.avalaible_location || '')
             }
         }
     }, [history, consumerProduct, dispatch, productId, successUpdate])

@@ -20,20 +20,20 @@ const SeedList = () => {
     let history = useHistory()
 
     const productLendMachinesList = useSelector(state => state.productLendMachinesList)
-    const { loading: loadingMachine, error: errorMachine, productLendMachines } = productLendMachinesList
+    const { loading: loadingMachine, error: errorMachine, productLendMachines = [] } = productLendMachinesList || {}
 
     const productLendMachinesDelete = useSelector(state => state.productLendMachinesDelete)
-    const { loading: loadingDelete, error: errorDelete, success: successDelete } = productLendMachinesDelete
+    const { loading: loadingDelete, error: errorDelete, success: successDelete } = productLendMachinesDelete || {}
 
     const LendMachinesCreate = useSelector(state => state.LendMachinesCreate)
-    const { loading: loadingCreate, error: errorCreate, success: successCreate, product: productCreate } = LendMachinesCreate
+    const { loading: loadingCreate, error: errorCreate, success: successCreate, product: productCreate } = LendMachinesCreate || {}
 
     const userLogin = useSelector(state => state.userLogin)
-    const { userInfo } = userLogin
+    const { userInfo } = userLogin || {}
 
     useEffect(() => {
         dispatch({ type: MACHINE_CREATE_RESET })
-        if (!userInfo.isAdmin && !userInfo) {
+        if (!userInfo || !userInfo.isAdmin) {
             history.push('/login')
         } else {
             if (successCreate) {
@@ -85,7 +85,7 @@ const SeedList = () => {
                             </thead>
                             <tbody>
                                 {
-                                    productLendMachines.map(machine => (
+                                    (Array.isArray(productLendMachines) ? productLendMachines : []).map(machine => (
                                         <tr key={machine._id}>
                                             <td>{machine._id}</td>
                                             <td>{machine.name}</td>

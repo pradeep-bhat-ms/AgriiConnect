@@ -24,23 +24,23 @@ const UserEditScreen = ({ match, history }) => {
     const dispatch = useDispatch()
 
     const userDetails = useSelector(state => state.userDetails)
-    const { loading, user, error } = userDetails
+    const { loading, user, error } = userDetails || {}
 
     const userUpdate = useSelector(state => state.userUpdate)
-    const { loading: loadingUpdate, success: successUpdate, error: errorUpdate } = userUpdate
+    const { loading: loadingUpdate, success: successUpdate, error: errorUpdate } = userUpdate || {}
 
     useEffect(() => {
         if (successUpdate) {
             dispatch({ type: USER_UPDATE_RESET })
             history.push('/admin/userList')
         } else {
-            if (!user.name || user._id !== userId) {
+            if (!user || !user.name || user._id !== userId) {
                 dispatch(getUserDetails(userId))
             } else {
-                setName(user.name)
-                setEmail(user.email)
-                setCropSelection(user.cropSelection)
-                setIsAdmin(user.isAdmin)
+                setName(user.name || '')
+                setEmail(user.email || '')
+                setCropSelection(user.cropSelection || '')
+                setIsAdmin(!!user.isAdmin)
             }
         }
     }, [user, userId, dispatch, successUpdate, history])

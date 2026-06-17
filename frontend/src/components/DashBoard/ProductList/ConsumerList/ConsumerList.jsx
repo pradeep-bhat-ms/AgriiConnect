@@ -20,10 +20,10 @@ const ConsumerList = () => {
     let history = useHistory()
 
     const consumerProductList = useSelector(state => state.consumerProductList)
-    const { loading: loadingConsumer, error: errorConsumer, consumerProducts } = consumerProductList
+    const { loading: loadingConsumer, error: errorConsumer, consumerProducts = [] } = consumerProductList || {}
 
     const consumerProductDelete = useSelector(state => state.consumerProductDelete)
-    const { loading: deleteLoadingConsumer, error: errorDeleteConsumer, success: successDelete } = consumerProductDelete
+    const { loading: deleteLoadingConsumer, error: errorDeleteConsumer, success: successDelete } = consumerProductDelete || {}
 
     const consumerCreate = useSelector(state => state.consumerCreate)
     const {
@@ -31,14 +31,14 @@ const ConsumerList = () => {
         error: errorcreateConsumer,
         success: successCreate,
         product: consumerProduct
-    } = consumerCreate
+    } = consumerCreate || {}
 
     const userLogin = useSelector(state => state.userLogin)
-    const { userInfo } = userLogin
+    const { userInfo } = userLogin || {}
 
     useEffect(() => {
         dispatch({ type: CONSUMER_CREATE_RESET })
-        if (!userInfo.isAdmin && !userInfo) {
+        if (!userInfo || !userInfo.isAdmin) {
             history.push('/login')
         } else {
             if (successCreate) {
@@ -90,7 +90,7 @@ const ConsumerList = () => {
                             </thead>
                             <tbody>
                                 {
-                                    consumerProducts.map(consumer => (
+                                    (Array.isArray(consumerProducts) ? consumerProducts : []).map(consumer => (
                                         <tr key={consumer._id}>
                                             <td>{consumer._id}</td>
                                             <td>{consumer.seller_name}</td>

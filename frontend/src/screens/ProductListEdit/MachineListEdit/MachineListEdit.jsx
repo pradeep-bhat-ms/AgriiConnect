@@ -33,26 +33,26 @@ const SeedListEdit = ({ match }) => {
     let history = useHistory()
 
     const productLendMachinesDetails = useSelector(state => state.productLendMachinesDetails)
-    const { loading, productLendMachines, error } = productLendMachinesDetails
+    const { loading, productLendMachines, error } = productLendMachinesDetails || {}
 
     const LendMachinesUpdate = useSelector(state => state.LendMachinesUpdate)
-    const { loading: loadingUpdate, success: successUpdate, error: errorUpdate } = LendMachinesUpdate
+    const { loading: loadingUpdate, success: successUpdate, error: errorUpdate } = LendMachinesUpdate || {}
 
     useEffect(() => {
         if (successUpdate) {
             dispatch({ type: MACHINE_UPDATE_RESET })
             history.push('/admin/productlist')
         } else {
-            if (!productLendMachines.name || productLendMachines._id !== productId) {
+            if (!productLendMachines || !productLendMachines.name || productLendMachines._id !== productId) {
                 dispatch(listLendMachineProductsDetails(productId))
             } else {
-                setName(productLendMachines.name)
-                setDescription(productLendMachines.description)
-                setPrice(productLendMachines.price)
-                setImage(productLendMachines.image)
-                setTarget_plant(productLendMachines.target_plant)
-                setQuantity(productLendMachines.quantity)
-                setMachine_power(productLendMachines.machine_power)
+                setName(productLendMachines.name || '')
+                setDescription(productLendMachines.description || '')
+                setPrice(productLendMachines.price || '')
+                setImage(productLendMachines.image || '')
+                setTarget_plant(productLendMachines.target_plant || '')
+                setQuantity(productLendMachines.quantity || '')
+                setMachine_power(productLendMachines.machine_power || '')
             }
         }
     }, [history, productLendMachines, dispatch, productId, successUpdate])

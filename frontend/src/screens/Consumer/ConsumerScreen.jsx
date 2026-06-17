@@ -18,7 +18,7 @@ const ConsumerScreen = () => {
     const dispatch = useDispatch();
 
     const consumerProductList = useSelector(state => state.consumerProductList)
-    const { loading, consumerProducts, error } = consumerProductList
+    const { loading, consumerProducts = [], error } = consumerProductList || {}
 
     const [numberOfItems, setNumberOfItems] = useState(3);
 
@@ -27,10 +27,11 @@ const ConsumerScreen = () => {
     }, [dispatch])
 
     const showMore = () => {
-        if (numberOfItems + 3 <= consumerProducts?.length) {
+        const length = Array.isArray(consumerProducts) ? consumerProducts.length : 0;
+        if (numberOfItems + 3 <= length) {
             setNumberOfItems(numberOfItems + 3)
         } else {
-            setNumberOfItems(consumerProducts?.length || 0)
+            setNumberOfItems(length)
         }
     }
 
@@ -65,7 +66,7 @@ const ConsumerScreen = () => {
                         <div className="mt-8">
                             <div className="flex flex-wrap -mx-4">
                                 {
-                                    consumerProducts && consumerProducts
+                                    (Array.isArray(consumerProducts) ? consumerProducts : [])
                                         .slice(0, numberOfItems)
                                         .map((consumer, index) => (
                                             <ConsumerProducts
@@ -85,7 +86,7 @@ const ConsumerScreen = () => {
 
                             <div className="mt-12 text-center flex flex-col items-center">
                                 {
-                                    consumerProducts && numberOfItems >= consumerProducts.length ? (
+                                    consumerProducts && numberOfItems >= (Array.isArray(consumerProducts) ? consumerProducts.length : 0) ? (
                                         <motion.div
                                             initial={{ opacity: 0 }}
                                             animate={{ opacity: 1 }}

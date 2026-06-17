@@ -20,8 +20,8 @@ const Register = ({ location, history }) => {
     const dispatch = useDispatch()
 
     const userRegister = useSelector(state => state.userRegister)
-    const { loading, userInfo, error } = userRegister
-    const redirect = location.search ? location.search.split('=')[1] : '/'
+    const { loading, userInfo, error } = userRegister || {}
+    const redirect = location?.search ? location.search.split('=')[1] : '/'
 
     useEffect(() => {
         if (userInfo) {

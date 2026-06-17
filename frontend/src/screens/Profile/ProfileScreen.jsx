@@ -24,31 +24,31 @@ const ProfileScreen = ({ history }) => {
     const dispatch = useDispatch()
 
     const userDetails = useSelector(state => state.userDetails)
-    const { loading, user, error } = userDetails
+    const { loading, user, error } = userDetails || {}
 
     const userLogin = useSelector(state => state.userLogin)
-    const { userInfo } = userLogin
+    const { userInfo } = userLogin || {}
 
     const userUpdateProfile = useSelector(state => state.userUpdateProfile)
-    const { success } = userUpdateProfile
+    const { success } = userUpdateProfile || {}
 
     const orderListMy = useSelector(state => state.orderListMy)
-    const { loading: loadingOrders, error: errorOrders, orders } = orderListMy
+    const { loading: loadingOrders, error: errorOrders, orders = [] } = orderListMy || {}
 
     const supplierProdictListMy = useSelector(state => state.supplierProdictListMy)
-    const { loading: loadingProducts, error: errorProducts, products } = supplierProdictListMy
+    const { loading: loadingProducts, error: errorProducts, products = [] } = supplierProdictListMy || {}
 
     useEffect(() => {
         if (!userInfo) {
             history.push('/login')
         } else {
-            if (!user.name) {
+            if (!user || !user.name) {
                 dispatch(getUserDetails('profile'))
                 dispatch(listMyOrders())
                 dispatch(listMyProducts())
             } else {
-                setName(user.name)
-                setEmail(user.email)
+                setName(user.name || '')
+                setEmail(user.email || '')
                 setCropSelection(user.cropSelection || '')
             }
         }
@@ -60,7 +60,7 @@ const ProfileScreen = ({ history }) => {
             setMessage('Passwords do not match')
         } else {
             setMessage(null)
-            dispatch(updateUserProfile({ id: user._id, name, email, password, cropSelection }))
+            dispatch(updateUserProfile({ id: user?._id, name, email, password, cropSelection }))
         }
     }
 
@@ -177,7 +177,7 @@ const ProfileScreen = ({ history }) => {
                                                     </tr>
                                                 </thead>
                                                 <tbody className="divide-y divide-gray-50">
-                                                    {orders && orders.map(order => (
+                                                    {(Array.isArray(orders) ? orders : []).map(order => (
                                                         <tr key={order._id} className="hover:bg-gray-50 transition-colors">
                                                             <td className="px-6 py-4 text-gray-500 font-mono text-xs">{order._id.substring(0, 10)}...</td>
                                                             <td className="px-6 py-4 text-gray-600">{order.createdAt?.substring(0, 10)}</td>
@@ -231,7 +231,7 @@ const ProfileScreen = ({ history }) => {
                                                     </tr>
                                                 </thead>
                                                 <tbody className="divide-y divide-gray-50">
-                                                    {products && products.map(product => (
+                                                    {(Array.isArray(products) ? products : []).map(product => (
                                                         <tr key={product._id} className="hover:bg-gray-50 transition-colors">
                                                             <td className="px-6 py-4">
                                                                 <img src={product.image} alt={product.name} className="w-14 h-14 rounded-lg object-cover" />
@@ -253,7 +253,7 @@ const ProfileScreen = ({ history }) => {
                                                                         {reviewVisible === product._id && (
                                                                             <div className="absolute z-50 left-0 top-10 bg-white border border-gray-200 rounded-xl shadow-xl p-4 min-w-[220px]">
                                                                                 <p className="font-bold text-gray-900 mb-2">Rating: {product.rating}/5</p>
-                                                                                {product.reviews?.map(review => (
+                                                                                {(Array.isArray(product.reviews) ? product.reviews : []).map(review => (
                                                                                     <div key={review._id} className="bg-gray-50 p-2 rounded-lg mb-1 text-xs text-gray-700">
                                                                                         {review.comment}
                                                                                     </div>

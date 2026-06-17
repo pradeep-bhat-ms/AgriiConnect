@@ -15,7 +15,7 @@ const Cart = ({ match, location, history }) => {
     const dispatch = useDispatch()
 
     const cartSeed = useSelector((state) => state.cartSeed)
-    const { cartItems } = cartSeed
+    const { cartItems = [] } = cartSeed || {}
 
     useEffect(() => {
         if (productId) {
@@ -31,8 +31,8 @@ const Cart = ({ match, location, history }) => {
         history.push('/login?redirect=shipping')
     }
 
-    const totalItems = cartItems.reduce((acc, item) => acc + item.qty, 0)
-    const totalPrice = cartItems.reduce((acc, item) => acc + item.qty * item.price, 0).toFixed(2)
+    const totalItems = (Array.isArray(cartItems) ? cartItems : []).reduce((acc, item) => acc + item.qty, 0)
+    const totalPrice = (Array.isArray(cartItems) ? cartItems : []).reduce((acc, item) => acc + item.qty * item.price, 0).toFixed(2)
 
     return (
         <div className="min-h-screen bg-gray-50 pt-24 pb-16">
@@ -44,7 +44,7 @@ const Cart = ({ match, location, history }) => {
                     <h1 className="text-4xl font-extrabold text-gray-900">Shopping Cart</h1>
                 </div>
 
-                {cartItems.length === 0 ? (
+                {(!cartItems || cartItems.length === 0) ? (
                     <motion.div
                         initial={{ opacity: 0, scale: 0.95 }}
                         animate={{ opacity: 1, scale: 1 }}
@@ -68,7 +68,7 @@ const Cart = ({ match, location, history }) => {
                         {/* Cart Items */}
                         <div className="lg:col-span-2 space-y-4">
                             <AnimatePresence>
-                                {cartItems.map((item) => (
+                                {(Array.isArray(cartItems) ? cartItems : []).map((item) => (
                                     <motion.div
                                         key={item.seed}
                                         initial={{ opacity: 0, x: -20 }}

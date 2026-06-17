@@ -21,10 +21,11 @@ const Farmer_LendScreen = () => {
     }, [dispatch]);
 
     const showMore = () => {
-        if (numberOfItems + 3 <= productLendMachines.length) {
+        const length = Array.isArray(productLendMachines) ? productLendMachines.length : 0;
+        if (numberOfItems + 3 <= length) {
             setNumberOfItems(numberOfItems + 3);
         } else {
-            setNumberOfItems(productLendMachines.length);
+            setNumberOfItems(length);
         }
     };
 
@@ -56,7 +57,7 @@ const Farmer_LendScreen = () => {
                 ) : (
                     <div className="mt-8">
                         <div className="flex flex-wrap -mx-4">
-                            {productLendMachines && productLendMachines
+                            {(Array.isArray(productLendMachines) ? productLendMachines : [])
                                 .slice(0, numberOfItems)
                                 .map((machine, index) => (
                                     <LendMachines
@@ -72,7 +73,7 @@ const Farmer_LendScreen = () => {
                         </div>
 
                         <div className="mt-12 text-center flex flex-col items-center">
-                            {productLendMachines && numberOfItems >= productLendMachines.length ? (
+                            {productLendMachines && numberOfItems >= (Array.isArray(productLendMachines) ? productLendMachines.length : 0) ? (
                                 <motion.div
                                     initial={{ opacity: 0 }}
                                     animate={{ opacity: 1 }}

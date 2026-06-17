@@ -15,13 +15,13 @@ const UserListScreen = ({ history }) => {
     const dispatch = useDispatch()
 
     const userList = useSelector(state => state.userList)
-    const { loading, error, users } = userList
+    const { loading, error, users = [] } = userList || {}
 
     const userLogin = useSelector(state => state.userLogin)
-    const { userInfo } = userLogin
+    const { userInfo } = userLogin || {}
     
     const userDelete = useSelector(state => state.userDelete)
-    const { success: successDelete } = userDelete
+    const { success: successDelete } = userDelete || {}
 
     useEffect(() => {
         if(userInfo && userInfo.isAdmin) {
@@ -57,7 +57,7 @@ const UserListScreen = ({ history }) => {
                                 </thead>
                                 <tbody>
                                     {
-                                        users.map(user => (
+                                        (Array.isArray(users) ? users : []).map(user => (
                                             <tr key={user._id}>
                                                 <td>{user._id}</td>
                                                 <td>{user.name}</td>

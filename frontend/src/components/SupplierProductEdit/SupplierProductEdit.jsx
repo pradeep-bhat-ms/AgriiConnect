@@ -34,27 +34,27 @@ const SupplierProductEdit = ({ match }) => {
     let history = useHistory()
 
     const FarmerProductDetails = useSelector(state => state.FarmerProductDetails)
-    const { loading, product, error } = FarmerProductDetails
+    const { loading, product, error } = FarmerProductDetails || {}
 
     const farmerProductUpdate = useSelector(state => state.farmerProductUpdate)
-    const { loading: loadingUpdate, success: successUpdate, error: errorUpdate } = farmerProductUpdate
+    const { loading: loadingUpdate, success: successUpdate, error: errorUpdate } = farmerProductUpdate || {}
 
     useEffect(() => {
         if (successUpdate) {
             dispatch({ type: SUPPLIER_PRODUCT_UPDATE_RESET })
             history.push('/profile')
         } else {
-            if (!product.name || product._id !== productId) {
+            if (!product || !product.name || product._id !== productId) {
                 dispatch(getroductsDetails(productId))
             } else {
-                setName(product.name)
-                setDescription(product.description)
-                setEmail(product.email)
-                setAddress(product.address)
-                setImage(product.image)
-                setCropSelection(product.cropSelection)
-                setStorage(product.storage)
-                setPhonenumber(product.phonenumber)
+                setName(product.name || '')
+                setDescription(product.description || '')
+                setEmail(product.email || '')
+                setAddress(product.address || '')
+                setImage(product.image || '')
+                setCropSelection(product.cropSelection || '')
+                setStorage(product.storage || '')
+                setPhonenumber(product.phonenumber || '')
             }
         }
     }, [history, product, dispatch, productId, successUpdate])
