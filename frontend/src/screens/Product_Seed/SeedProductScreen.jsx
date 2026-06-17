@@ -19,6 +19,7 @@ import Meta from '../../components/Helmet/Meta'
 import { addToCart } from './../../actions/cartActions'
 
 const SeedProductScreen = ({ history, match }) => {
+    const productId = match && match.params ? match.params.id : ''
     const [qty, setQty] = useState(1)
     const [rating, setRating] = useState(0)
     const [comment, setComment] = useState('')
@@ -50,11 +51,11 @@ const SeedProductScreen = ({ history, match }) => {
             setComment('')
         }
 
-        if (!product || product._id !== match.params.id) {
-            dispatch(listSeedProductsDetails(match.params.id))
+        if (productId && (!product || product._id !== productId)) {
+            dispatch(listSeedProductsDetails(productId))
             dispatch({ type: PRODUCT_CREATE_REVIEW_RESET })
         }
-    }, [dispatch, match.params.id, successProductReview, product])
+    }, [dispatch, productId, successProductReview, product])
 
     const addToCartHandler = () => {
         if (product) {
@@ -66,12 +67,14 @@ const SeedProductScreen = ({ history, match }) => {
 
     const submitHandler = (e) => {
         e.preventDefault()
-        dispatch(
-            createProductReview(match.params.id, {
-                rating,
-                comment,
-            })
-        )
+        if (productId) {
+            dispatch(
+                createProductReview(productId, {
+                    rating,
+                    comment,
+                })
+            )
+        }
     }
 
     return (

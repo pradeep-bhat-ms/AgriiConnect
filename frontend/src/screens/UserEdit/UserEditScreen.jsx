@@ -14,7 +14,7 @@ import Meta from '../../components/Helmet/Meta'
 
 const UserEditScreen = ({ match, history }) => {
 
-    const userId = match.params.id
+    const userId = match && match.params ? match.params.id : '';
 
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')

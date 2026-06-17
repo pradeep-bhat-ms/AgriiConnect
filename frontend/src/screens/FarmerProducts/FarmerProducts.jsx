@@ -18,7 +18,7 @@ import Meta from '../../components/Helmet/Meta';
 
 const FarmerProduct = ({ history, match }) => {
 
-    const userId = match.params.id
+    const userId = match && match.params ? match.params.id : ''
 
     const dispatch = useDispatch()
 
@@ -37,22 +37,27 @@ const FarmerProduct = ({ history, match }) => {
     useEffect(() => {
 
         if (successReview) {
+            alert('Review Submitted!')
+            setRating(0)
+            setComment('')
 
             // history.push('/admin/dashboard')
         } else {
-            if (!product || !product.name || product._id !== userId) {
+            if (userId && (!product || !product.name || product._id !== userId)) {
                 dispatch(getroductsDetails(userId))
             }
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [dispatch, match, successReview, history, userId])
+    }, [dispatch, successReview, history, userId])
 
     const submitHandler = (e) => {
         e.preventDefault()
-        dispatch(createProductReview(match.params.id, {
-            rating,
-            comment,
-        }))
+        if (userId) {
+            dispatch(createProductReview(userId, {
+                rating,
+                comment,
+            }))
+        }
     }
 
     return (

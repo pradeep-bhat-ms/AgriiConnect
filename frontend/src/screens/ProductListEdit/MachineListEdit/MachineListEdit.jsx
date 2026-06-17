@@ -27,7 +27,7 @@ const SeedListEdit = ({ match }) => {
     const [machine_power, setMachine_power] = useState('')
     const [uploading, setUploading] = useState(false)
 
-    const productId = match.params.id
+    const productId = match && match.params ? match.params.id : ''
 
     const dispatch = useDispatch()
     let history = useHistory()

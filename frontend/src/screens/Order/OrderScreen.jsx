@@ -20,7 +20,7 @@ import Meta from '../../components/Helmet/Meta'
 
 const OrderScreen = ({ match }) => {
 
-    const orderId = match.params.id
+    const orderId = match && match.params ? match.params.id : ''
 
     const [sdkReady, setSdkReady] = useState(false)
 

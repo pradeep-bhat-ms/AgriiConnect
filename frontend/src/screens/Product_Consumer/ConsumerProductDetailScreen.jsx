@@ -10,6 +10,7 @@ import { listConsumerProductsDetails } from '../../actions/consumerProductAction
 import Meta from '../../components/Helmet/Meta';
 
 const ConsumerProductDetailScreen = ({ history, match }) => {
+    const productId = match && match.params ? match.params.id : '';
     const [qty, setQty] = useState(1);
 
     const dispatch = useDispatch()
@@ -18,11 +19,15 @@ const ConsumerProductDetailScreen = ({ history, match }) => {
     const { loading, error, consumerProduct } = consumerProductDetails || {}
 
     useEffect(() => {
-        dispatch(listConsumerProductsDetails(match.params.id))
-    }, [dispatch, match])
+        if (productId) {
+            dispatch(listConsumerProductsDetails(productId))
+        }
+    }, [dispatch, productId])
 
     const addtoCartHandler = () => {
-        history.push(`/cart/${match.params.id}?qty=${qty}`)
+        if (productId) {
+            history.push(`/cart/${productId}?qty=${qty}`)
+        }
     }
 
     return (

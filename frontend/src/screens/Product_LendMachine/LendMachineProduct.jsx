@@ -9,6 +9,7 @@ import Message from '../../components/Message/Message';
 import Meta from '../../components/Helmet/Meta';
 
 const LendMachineProduct = ({ history, match }) => {
+    const productId = match && match.params ? match.params.id : '';
     const [qty, setQty] = useState(1);
 
     const dispatch = useDispatch()
@@ -17,12 +18,16 @@ const LendMachineProduct = ({ history, match }) => {
     const { loading, error, productLendMachines } = productLendMachinesDetails || {}
 
     useEffect(() => {
-        dispatch(listLendMachineProductsDetails(match.params.id))
+        if (productId) {
+            dispatch(listLendMachineProductsDetails(productId))
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [dispatch, match])
+    }, [dispatch, productId])
 
     const addtoCartHandler = () => {
-        history.push(`/cart/machine-${match.params.id}?qty=${qty}`)
+        if (productId) {
+            history.push(`/cart/machine-${productId}?qty=${qty}`)
+        }
     }
 
     return (
