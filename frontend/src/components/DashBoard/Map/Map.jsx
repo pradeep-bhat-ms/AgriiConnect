@@ -25,14 +25,21 @@ const MapComponent = () => {
 
   const [selectedPlace, setSelectedPlace] = useState(null);
 
-  const supplierProductList = useSelector(state => state.supplierProductList);
-  const { loading: loadingProducts, error: errorProducts, products } = supplierProductList;
+  const supplierProductList = useSelector(
+    state => state.supplierProductList || {}
+  );
 
-  const userLogin = useSelector(state => state.userLogin);
+  const {
+    loading: loadingProducts,
+    error: errorProducts,
+    products = []
+  } = supplierProductList;
+
+  const userLogin = useSelector(state => state.userLogin || {});
   const { userInfo } = userLogin;
 
   useEffect(() => {
-    if (!userInfo?.isAdmin && !userInfo) {
+    if (!userInfo) {
       history.push('/login');
     } else {
       dispatch(listSupplierProducts());
@@ -40,10 +47,12 @@ const MapComponent = () => {
   }, [dispatch, history, userInfo]);
 
   const { isLoaded } = useJsApiLoader({
-    googleMapsApiKey: process.env.REACT_APP_GOOGLE_KEY
+    googleMapsApiKey: process.env.REACT_APP_GOOGLE_KEY || ''
   });
 
-  if (!isLoaded) return <div>Loading map...</div>;
+  if (!isLoaded) {
+    return <div>Loading map...</div>;
+  }
 
   return (
     <GoogleMap
@@ -55,50 +64,75 @@ const MapComponent = () => {
       {loadingProducts ? (
         <Loader />
       ) : errorProducts ? (
-        <Message variant='danger'>{errorProducts}</Message>
+        <Message variant="danger">{errorProducts}</Message>
       ) : (
-        products.map(place => (
-          <Marker
-            key={place._id}
-            position={{
-              lat: place.latitude,
-              lng: place.longitude
-            }}
-            onClick={() => setSelectedPlace(place)}
-            icon={{
-              url: '/mapIcon.svg',
-              scaledSize: new window.google.maps.Size(25, 25)
-            }}
-          />
-        ))
+        Array.isArray(products) &&
+        products.map((place) => {
+          if (!place?.latitude || !place?.longitude) return null;
+
+          return (
+            <Marker
+              key={place._id}
+              position={{
+                lat: Number(place.latitude),
+                lng: Number(place.longitude)
+              }}
+              onClick={() => setSelectedPlace(place)}
+              icon={{
+                url: '/mapIcon.svg',
+                scaledSize: new window.google.maps.Size(25, 25)
+              }}
+            />
+          );
+        })
       )}
 
       {selectedPlace && (
         <InfoWindow
           position={{
-            lat: selectedPlace.latitude,
-            lng: selectedPlace.longitude
+            lat: Number(selectedPlace.latitude),
+            lng: Number(selectedPlace.longitude)
           }}
           onCloseClick={() => setSelectedPlace(null)}
         >
           <div>
-            <Image className="mx-auto d-block img-fluid mb-1" rounded width="120px" src={selectedPlace.image} alt={selectedPlace.name} />
-            <h4 style={{ textAlign: "center" }}>{selectedPlace.cropSelection}</h4>
+            <Image
+              className="mx-auto d-block img-fluid mb-1"
+              rounded
+              width="120px"
+              src={selectedPlace.image}
+              alt={selectedPlace.name}
+            />
+
+            <h4 style={{ textAlign: "center" }}>
+              {selectedPlace.cropSelection}
+            </h4>
+
             <p>
-              Farmer: <strong>{selectedPlace.name}</strong><br />
-              Description: {selectedPlace.description}<br />
-              Address: {selectedPlace.address}<br />
-              Reviewed: {
-                selectedPlace.isReviwed ? (
-                  <>
-                    <i className="fas fa-check" style={{ color: "green" }}></i>
-                    <p><Rating text="Rating" value={selectedPlace.rating} /></p>
-                  </>
-                ) : (
-                  <i className="fas fa-times" style={{ color: "red" }} />
-                )
-              }
+              Farmer: <strong>{selectedPlace.name}</strong>
+              <br />
+              Description: {selectedPlace.description}
+              <br />
+              Address: {selectedPlace.address}
             </p>
+
+            {selectedPlace.isReviwed ? (
+              <>
+                <i
+                  className="fas fa-check"
+                  style={{ color: "green" }}
+                ></i>
+                <Rating
+                  text="Rating"
+                  value={selectedPlace.rating}
+                />
+              </>
+            ) : (
+              <i
+                className="fas fa-times"
+                style={{ color: "red" }}
+              ></i>
+            )}
           </div>
         </InfoWindow>
       )}
