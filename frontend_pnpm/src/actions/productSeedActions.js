@@ -22,10 +22,12 @@ import {
 } from './../constants/productConstants.js';
 import { logout } from './userActions';
 
+const API_URL = process.env.REACT_APP_API_URL || '';
+
 export const listSeedProducts = () => async (dispatch) => {
   try {
     dispatch({ type: PRODUCT_SEED_LIST_REQUEST });
-    const { data } = await axios.get('/api/seeds');
+    const { data } = await axios.get(`${API_URL}/api/seeds`);
     dispatch({ type: PRODUCT_SEED_LIST_SUCCESS, payload: data });
   } catch (error) {
     dispatch({
@@ -38,7 +40,7 @@ export const listSeedProducts = () => async (dispatch) => {
 export const listSeedProductsDetails = (id) => async (dispatch) => {
   try {
     dispatch({ type: PRODUCT_SEED_DETAILS_REQUEST });
-    const { data } = await axios.get(`/api/seeds/${id}`);
+    const { data } = await axios.get(`${API_URL}/api/seeds/${id}`);
     dispatch({ type: PRODUCT_SEED_DETAILS_SUCCESS, payload: data });
   } catch (error) {
     dispatch({
@@ -62,7 +64,7 @@ export const deleteSeedProducts = (id) => async (dispatch, getState) => {
       },
     };
 
-    await axios.delete(`/api/seeds/${id}`, config);
+    await axios.delete(`${API_URL}/api/seeds/${id}`, config);
 
     dispatch({ type: SEED_DELETE_SUCCESS });
   } catch (error) {
@@ -87,7 +89,7 @@ export const createSeedProducts = () => async (dispatch, getState) => {
       },
     };
 
-    const { data } = await axios.post(`/api/seeds`, {}, config);
+    const { data } = await axios.post(`${API_URL}/api/seeds`, {}, config);
     dispatch({ type: SEED_CREATE_SUCCESS, payload: data });
   } catch (error) {
     dispatch({
@@ -112,7 +114,7 @@ export const updateSeedProducts = (seed) => async (dispatch, getState) => {
       },
     };
 
-    const { data } = await axios.put(`/api/seeds/${seed._id}`, seed, config);
+    const { data } = await axios.put(`${API_URL}/api/seeds/${seed._id}`, seed, config);
 
     dispatch({ type: SEED_UPDATE_SUCCESS, payload: data });
   } catch (error) {
@@ -138,7 +140,7 @@ export const createProductReview = (productId, review) => async (dispatch, getSt
       },
     };
 
-    await axios.post(`/api/seeds/${productId}/reviews`, review, config);
+    await axios.post(`${API_URL}/api/seeds/${productId}/reviews`, review, config);
 
     dispatch({ type: PRODUCT_CREATE_REVIEW_SUCCESS });
   } catch (error) {

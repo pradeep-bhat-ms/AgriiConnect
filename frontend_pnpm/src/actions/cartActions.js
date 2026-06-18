@@ -6,6 +6,8 @@ import {
   CART_SAVE_PAYMENT_METHOD,
 } from './../constants/cartConstants'
 
+const API_URL = process.env.REACT_APP_API_URL || '';
+
 // Add to cart: works with either full product object or just id
 export const addToCart = (productOrId, qty) => async (dispatch, getState) => {
   let item = null
@@ -24,7 +26,7 @@ export const addToCart = (productOrId, qty) => async (dispatch, getState) => {
     const id = productOrId
     // ✅ Case 2: fetch by id
     try {
-      const { data } = await axios.get(`/api/seeds/${id}`)
+      const { data } = await axios.get(`${API_URL}/api/seeds/${id}`)
       item = {
         seed: data._id,
         name: data.name,
@@ -35,7 +37,7 @@ export const addToCart = (productOrId, qty) => async (dispatch, getState) => {
       }
     } catch (error) {
       try {
-        const { data } = await axios.get(`/api/lendMachines/${id}`)
+        const { data } = await axios.get(`${API_URL}/api/lendMachines/${id}`)
         item = {
           seed: data._id,
           name: data.name,
@@ -46,7 +48,7 @@ export const addToCart = (productOrId, qty) => async (dispatch, getState) => {
         }
       } catch (error2) {
         try {
-          const { data } = await axios.get(`/api/consumer/${id}`)
+          const { data } = await axios.get(`${API_URL}/api/consumer/${id}`)
           item = {
             seed: data._id,
             name: data.prod_name,

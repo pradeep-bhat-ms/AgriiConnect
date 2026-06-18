@@ -18,6 +18,8 @@ import { getOrderDetails, payOrder, deliverOrder } from './../../actions/orderAc
 import { ORDER_PAY_RESET, ORDER_DELIVER_RESET } from './../../constants/orderConstant'
 import Meta from '../../components/Helmet/Meta'
 
+const API_URL = process.env.REACT_APP_API_URL || '';
+
 const OrderScreen = ({ match }) => {
 
     const orderId = match && match.params ? match.params.id : ''
@@ -47,7 +49,7 @@ const OrderScreen = ({ match }) => {
 
         // Add paypal script to body
         const addPayPalScript = async () => {
-            const { data: clientId } = await axios.get('/api/config/paypal')
+            const { data: clientId } = await axios.get(`${API_URL}/api/config/paypal`)
             const script = document.createElement('script')
             script.type = 'text/javascript'
             script.src = `https://www.paypal.com/sdk/js?client-id=${clientId}`

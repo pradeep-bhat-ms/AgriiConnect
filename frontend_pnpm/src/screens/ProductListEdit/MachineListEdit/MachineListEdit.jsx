@@ -16,6 +16,8 @@ import { listLendMachineProductsDetails, updateLendMachine } from './../../../ac
 import { MACHINE_UPDATE_RESET } from '../../../constants/productConstants'
 import Meta from '../../../components/Helmet/Meta'
 
+const API_URL = process.env.REACT_APP_API_URL || '';
+
 const SeedListEdit = ({ match }) => {
 
     const [name, setName] = useState('')
@@ -84,7 +86,7 @@ const SeedListEdit = ({ match }) => {
                 }
             }
 
-            const { data } = await axios.post('/api/upload', formData, config)
+            const { data } = await axios.post(`${API_URL}/api/upload`, formData, config)
 
             setImage(data)
             setUploading(false)

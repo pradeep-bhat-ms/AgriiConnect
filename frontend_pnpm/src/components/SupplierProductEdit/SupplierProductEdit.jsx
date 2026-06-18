@@ -16,6 +16,8 @@ import { updateSupplierProduct, getroductsDetails } from './../../actions/suppli
 import { SUPPLIER_PRODUCT_UPDATE_RESET } from './../../constants/supplierConstant'
 import Meta from '../Helmet/Meta'
 
+const API_URL = process.env.REACT_APP_API_URL || '';
+
 const SupplierProductEdit = ({ match }) => {
 
     const [name, setName] = useState('')
@@ -87,7 +89,7 @@ const SupplierProductEdit = ({ match }) => {
                 }
             }
 
-            const { data } = await axios.post('/api/upload', formData, config)
+            const { data } = await axios.post(`${API_URL}/api/upload`, formData, config)
 
             setImage(data)
             setUploading(false)

@@ -52,7 +52,7 @@ const Harvest = () => {
                                 </thead>
                                 <tbody>
                                     {
-                                        products.map(product => (
+                                        (Array.isArray(products) ? products : []).map(product => (
                                             <tr key={product._id}>
                                                 <td>{product.name}</td>
                                                 <td>{product.address}</td>

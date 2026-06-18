@@ -18,11 +18,13 @@ import {
     MACHINE_UPDATE_RESET,
 } from './../constants/productConstants.js'
 
+const API_URL = process.env.REACT_APP_API_URL || '';
+
 export const listLendMachineProducts = () => async (dispatch) => {
     try {
         dispatch({ type: PRODUCT_MACHINE_LIST_REQUEST })
 
-        const { data } = await axios.get('/api/lendMachines')
+        const { data } = await axios.get(`${API_URL}/api/lendMachines`)
 
         dispatch({
             type: PRODUCT_MACHINE_LIST_SUCCESS,
@@ -43,7 +45,7 @@ export const listLendMachineProductsDetails = (id) => async (dispatch) => {
     try {
         dispatch({ type: PRODUCT_MACHINE_DETAILS_REQUEST })
 
-        const { data } = await axios.get(`/api/lendMachines/${id}`)
+        const { data } = await axios.get(`${API_URL}/api/lendMachines/${id}`)
 
         dispatch({
             type: PRODUCT_MACHINE_DETAILS_SUCCESS,
@@ -72,7 +74,7 @@ export const deleteLendMachineProduct = (id) => async (dispatch, getState) => {
             },
         }
 
-        await axios.delete(`/api/lendMachines/${id}`, config)
+        await axios.delete(`${API_URL}/api/lendMachines/${id}`, config)
 
         dispatch({
             type: MACHINE_DELETE_SUCCESS,
@@ -100,7 +102,7 @@ export const createLendMachine = (id) => async (dispatch, getState) => {
             },
         }
 
-        const { data } = await axios.post(`/api/lendMachines`, {}, config)
+        const { data } = await axios.post(`${API_URL}/api/lendMachines`, {}, config)
 
         dispatch({
             type: MACHINE_CREATE_SUCCESS,
@@ -130,7 +132,7 @@ export const updateLendMachine = (machine) => async (dispatch, getState) => {
             },
         }
 
-        const { data } = await axios.put(`/api/lendMachines/${machine._id}`, machine, config)
+        const { data } = await axios.put(`${API_URL}/api/lendMachines/${machine._id}`, machine, config)
 
         dispatch({
             type: MACHINE_UPDATE_SUCCESS,

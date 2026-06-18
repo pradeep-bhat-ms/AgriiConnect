@@ -16,6 +16,8 @@ import { listConsumerProductsDetails, updateConsumer } from './../../../actions/
 import { CONSUMER_UPDATE_RESET } from '../../../constants/productConstants'
 import Meta from '../../../components/Helmet/Meta'
 
+const API_URL = process.env.REACT_APP_API_URL || '';
+
 const ConsumerListEdit = ({ match }) => {
 
     const [prodName, setProdName] = useState('')
@@ -84,7 +86,7 @@ const ConsumerListEdit = ({ match }) => {
                 }
             }
 
-            const { data } = await axios.post('/api/upload', formData, config)
+            const { data } = await axios.post(`${API_URL}/api/upload`, formData, config)
 
             setImage(data)
             setUploading(false)

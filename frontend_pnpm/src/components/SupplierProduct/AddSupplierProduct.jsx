@@ -13,6 +13,8 @@ import Message from './../../components/Message/Message'
 import Loader from './../../components/Loader/Loader'
 import { createSupplierProduct } from '../../actions/supplierProduct'
 
+const API_URL = process.env.REACT_APP_API_URL || '';
+
 const AddSupplierProduct = () => {
 
     const [name, setName] = useState('')
@@ -76,7 +78,7 @@ const AddSupplierProduct = () => {
                 }
             }
 
-            const { data } = await axios.post('/api/upload', formData, config)
+            const { data } = await axios.post(`${API_URL}/api/upload`, formData, config)
 
             setImage(data)
             setUploading(false)
