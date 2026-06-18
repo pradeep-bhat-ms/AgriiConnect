@@ -1,7 +1,4 @@
 import axios from 'axios';
-
-const API_URL = process.env.REACT_APP_API_URL;
-
 import {
   PRODUCT_SEED_LIST_REQUEST,
   PRODUCT_SEED_LIST_SUCCESS,
@@ -22,8 +19,9 @@ import {
   PRODUCT_CREATE_REVIEW_SUCCESS,
   PRODUCT_CREATE_REVIEW_FAIL,
 } from './../constants/productConstants.js';
-
 import { logout } from './userActions';
+
+const API_URL = process.env.REACT_APP_API_URL || '';
 
 // Get All Seeds
 export const listSeedProducts = () => async (dispatch) => {

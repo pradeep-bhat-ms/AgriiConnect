@@ -9,12 +9,14 @@ import {
 } from 'react-bootstrap'
 import { Link, useHistory } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import Message from './../../../components/Message/Message'
-import Loader from './../../../components/Loader/Loader'
-import FormContainer from './../../../components/FormContainer/FormContainer'
-import { listLendMachineProductsDetails, updateLendMachine } from './../../../actions/productLendMachinesActions'
+import Message from './../Message/Message'
+import Loader from './../../components/Loader/Loader'
+import FormContainer from './../../components/FormContainer/FormContainer'
+import { listLendMachineProductsDetails, updateLendMachine } from './../../actions/productLendMachinesActions'
 import { MACHINE_UPDATE_RESET } from '../../../constants/productConstants'
 import Meta from '../../../components/Helmet/Meta'
+
+const API_URL = process.env.REACT_APP_API_URL || '';
 
 const SeedListEdit = ({ match }) => {
 
@@ -84,7 +86,7 @@ const SeedListEdit = ({ match }) => {
                 }
             }
 
-            const { data } = await axios.post('/api/upload', formData, config)
+            const { data } = await axios.post(`${API_URL}/api/upload`, formData, config)
 
             setImage(data)
             setUploading(false)
