@@ -27,7 +27,7 @@ yarn-error.log*
 # Temporary backup and log files
 *_old_*/
 *_new_*/
-*_pnpm/
+# *_pnpm/
 *.log
 diff_*.txt
 *.tgz

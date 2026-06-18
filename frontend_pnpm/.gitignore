@@ -1,0 +1,22 @@
+# dependencies
+node_modules/
+node_modules_old/
+node_modules_old_*/
+node_modules_stuck/
+node_modules_stuck_*/
+
+# production
+build/
+
+# misc
+.DS_Store
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.eslintcache
+
+# log files and tarballs
+*.log
+*.tgz
