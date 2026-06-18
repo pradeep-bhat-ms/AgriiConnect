@@ -2,18 +2,18 @@ import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link, useHistory } from 'react-router-dom'
 
-import Message from '../../../Message/Message'
-import Loader from '../../../Loader/Loader'
-import FormContainer from '../../../FormContainer/FormContainer'
-import Meta from '../../../Helmet/Meta'
+import Message from '../../../components/Message/Message'
+import Loader from '../../../components/Loader/Loader'
+import FormContainer from '../../../components/FormContainer/FormContainer'
+import Meta from '../../../components/Helmet/Meta'
 
 // ✅ use your actual folders and action names
 import {
   listSeedProducts,
   deleteSeedProducts,   // renamed to match your actions file
   createSeedProducts,  // renamed to match your actions file
-} from '../../../../actions/productSeedActions'
-import { SEED_CREATE_RESET } from '../../../../constants/productConstants'
+} from '../../../actions/productSeedActions'
+import { SEED_CREATE_RESET } from '../../../constants/productConstants'
 
 const SeedList = () => {
   const dispatch = useDispatch()

@@ -7,11 +7,12 @@
   "scripts": {
     "start": "node backend/server",
     "server": "nodemon backend/server",
-    "client": "set NODE_OPTIONS=--openssl-legacy-provider && pnpm --dir frontend_pnpm start",
+    "client": "set NODE_OPTIONS=--openssl-legacy-provider && npm run start --prefix frontend",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "build": "npm run build --prefix frontend",
     "data:import": "node backend/seeder",
     "data:destroy": "node backend/seeder -d",
-    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false pnpm install --prefix frontend_pnpm && pnpm run build --prefix frontend_pnpm"
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix frontend && npm run build --prefix frontend"
   },
   "author": "Sanjula De Alwis",
   "license": "ISC",
