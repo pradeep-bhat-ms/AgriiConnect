@@ -3,7 +3,7 @@ import express from 'express'
 import morgan from 'morgan'
 import dotenv from 'dotenv'
 import colors from 'colors'
-
+import cors from 'cors';
 import connectDB from './config/db.js'
 import { notFound, errorHandler } from './middleware/errorMiddlware.js'
 
@@ -11,7 +11,7 @@ import productRoutes from './routes/productRoutes.js'
 import userRoutes from './routes/userRoutes.js'
 import orderRoutes from './routes/orderRoutes.js'
 import uploadRoutes from './routes/uploadRoutes.js'
-import supplierRoutes from './routes/supplierRoutes.js' 
+import supplierRoutes from './routes/supplierRoutes.js'
 import customRoutes from './routes/customRoutes.js'
 import seedRoutes from './routes/seedRoutes.js'
 import lendMachineRoutes from './routes/lendMachineRoutes.js'
@@ -25,7 +25,7 @@ const app = express()
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'))
 }
-
+app.use(cors());
 app.use(express.json())
 
 // Mount routes (note: each route file uses '/' internally)
