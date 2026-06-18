@@ -1,5 +1,7 @@
-// frontend/src/actions/productSeedActions.js
 import axios from 'axios';
+
+const API_URL = process.env.REACT_APP_API_URL;
+
 import {
   PRODUCT_SEED_LIST_REQUEST,
   PRODUCT_SEED_LIST_SUCCESS,
@@ -20,35 +22,60 @@ import {
   PRODUCT_CREATE_REVIEW_SUCCESS,
   PRODUCT_CREATE_REVIEW_FAIL,
 } from './../constants/productConstants.js';
+
 import { logout } from './userActions';
 
+// Get All Seeds
 export const listSeedProducts = () => async (dispatch) => {
   try {
     dispatch({ type: PRODUCT_SEED_LIST_REQUEST });
-    const { data } = await axios.get('/api/seeds');
-    dispatch({ type: PRODUCT_SEED_LIST_SUCCESS, payload: data });
+
+    const { data } = await axios.get(
+      `${API_URL}/api/seeds`
+    );
+
+    dispatch({
+      type: PRODUCT_SEED_LIST_SUCCESS,
+      payload: data,
+    });
   } catch (error) {
     dispatch({
       type: PRODUCT_SEED_LIST_FAIL,
-      payload: error?.response?.data?.message || error.message,
+      payload:
+        error.response?.data?.message ||
+        error.message,
     });
   }
 };
 
+// Get Seed Details
 export const listSeedProductsDetails = (id) => async (dispatch) => {
   try {
     dispatch({ type: PRODUCT_SEED_DETAILS_REQUEST });
-    const { data } = await axios.get(`/api/seeds/${id}`);
-    dispatch({ type: PRODUCT_SEED_DETAILS_SUCCESS, payload: data });
+
+    const { data } = await axios.get(
+      `${API_URL}/api/seeds/${id}`
+    );
+
+    dispatch({
+      type: PRODUCT_SEED_DETAILS_SUCCESS,
+      payload: data,
+    });
   } catch (error) {
     dispatch({
       type: PRODUCT_SEED_DETAILS_FAIL,
-      payload: error?.response?.data?.message || error.message,
+      payload:
+        error.response?.data?.message ||
+        error.message,
     });
   }
 };
 
-export const deleteSeedProducts = (id) => async (dispatch, getState) => {
+// Delete Seed
+export const deleteSeedProducts = (id) => async (
+  dispatch,
+  getState
+) => {
   try {
     dispatch({ type: SEED_DELETE_REQUEST });
 
@@ -62,18 +89,29 @@ export const deleteSeedProducts = (id) => async (dispatch, getState) => {
       },
     };
 
-    await axios.delete(`/api/seeds/${id}`, config);
+    await axios.delete(
+      `${API_URL}/api/seeds/${id}`,
+      config
+    );
 
-    dispatch({ type: SEED_DELETE_SUCCESS });
+    dispatch({
+      type: SEED_DELETE_SUCCESS,
+    });
   } catch (error) {
     dispatch({
       type: SEED_DELETE_FAIL,
-      payload: error?.response?.data?.message || error.message,
+      payload:
+        error.response?.data?.message ||
+        error.message,
     });
   }
 };
 
-export const createSeedProducts = () => async (dispatch, getState) => {
+// Create Seed
+export const createSeedProducts = () => async (
+  dispatch,
+  getState
+) => {
   try {
     dispatch({ type: SEED_CREATE_REQUEST });
 
@@ -87,45 +125,33 @@ export const createSeedProducts = () => async (dispatch, getState) => {
       },
     };
 
-    const { data } = await axios.post(`/api/seeds`, {}, config);
-    dispatch({ type: SEED_CREATE_SUCCESS, payload: data });
+    const { data } = await axios.post(
+      `${API_URL}/api/seeds`,
+      {},
+      config
+    );
+
+    dispatch({
+      type: SEED_CREATE_SUCCESS,
+      payload: data,
+    });
   } catch (error) {
     dispatch({
       type: SEED_CREATE_FAIL,
-      payload: error?.response?.data?.message || error.message,
+      payload:
+        error.response?.data?.message ||
+        error.message,
     });
   }
 };
 
-export const updateSeedProducts = (seed) => async (dispatch, getState) => {
+// Update Seed
+export const updateSeedProducts = (seed) => async (
+  dispatch,
+  getState
+) => {
   try {
     dispatch({ type: SEED_UPDATE_REQUEST });
-
-    const {
-      userLogin: { userInfo },
-    } = getState();
-
-    const config = {
-      headers: {
-        'Content-type': 'application/json',
-        Authorization: `Bearer ${userInfo.token}`,
-      },
-    };
-
-    const { data } = await axios.put(`/api/seeds/${seed._id}`, seed, config);
-
-    dispatch({ type: SEED_UPDATE_SUCCESS, payload: data });
-  } catch (error) {
-    dispatch({
-      type: SEED_UPDATE_FAIL,
-      payload: error?.response?.data?.message || error.message,
-    });
-  }
-};
-
-export const createProductReview = (productId, review) => async (dispatch, getState) => {
-  try {
-    dispatch({ type: PRODUCT_CREATE_REVIEW_REQUEST });
 
     const {
       userLogin: { userInfo },
@@ -138,14 +164,68 @@ export const createProductReview = (productId, review) => async (dispatch, getSt
       },
     };
 
-    await axios.post(`/api/seeds/${productId}/reviews`, review, config);
+    const { data } = await axios.put(
+      `${API_URL}/api/seeds/${seed._id}`,
+      seed,
+      config
+    );
 
-    dispatch({ type: PRODUCT_CREATE_REVIEW_SUCCESS });
+    dispatch({
+      type: SEED_UPDATE_SUCCESS,
+      payload: data,
+    });
   } catch (error) {
-    const message = error?.response?.data?.message || error.message;
+    dispatch({
+      type: SEED_UPDATE_FAIL,
+      payload:
+        error.response?.data?.message ||
+        error.message,
+    });
+  }
+};
+
+// Create Review
+export const createProductReview = (
+  productId,
+  review
+) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: PRODUCT_CREATE_REVIEW_REQUEST,
+    });
+
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    await axios.post(
+      `${API_URL}/api/seeds/${productId}/reviews`,
+      review,
+      config
+    );
+
+    dispatch({
+      type: PRODUCT_CREATE_REVIEW_SUCCESS,
+    });
+  } catch (error) {
+    const message =
+      error.response?.data?.message ||
+      error.message;
+
     if (message === 'Not authorized, token failed') {
       dispatch(logout());
     }
-    dispatch({ type: PRODUCT_CREATE_REVIEW_FAIL, payload: message });
+
+    dispatch({
+      type: PRODUCT_CREATE_REVIEW_FAIL,
+      payload: message,
+    });
   }
 };
